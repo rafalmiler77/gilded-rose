@@ -87,6 +87,7 @@ describe('Gilded Rose', function () {
         expect(Sulfuras.sellIn).to.equal(-1);
         expect(Sulfuras.quality).to.equal(80);
     });
+    
     it('should properly handle Backstage passes', function() {
         name = 'Backstage passes to a TAFKAL80ETC concert';
         let BackstagePasses: Item;
