@@ -87,7 +87,7 @@ describe('Gilded Rose', function () {
         expect(Sulfuras.sellIn).to.equal(-1);
         expect(Sulfuras.quality).to.equal(80);
     });
-    
+
     it('should properly handle Backstage passes', function() {
         name = 'Backstage passes to a TAFKAL80ETC concert';
         let BackstagePasses: Item;
@@ -132,7 +132,7 @@ describe('Gilded Rose', function () {
         conjured = testQuality(name, 3, 6, days);
         expect(conjured.name).to.equal('Conjured Mana Cake');
         expect(conjured.sellIn).to.equal(2);
-        expect(conjured.quality).to.equal(5);
+        expect(conjured.quality).to.equal(4);
 
         days = 30;
         conjured = testQuality(name, 3, 6, days);

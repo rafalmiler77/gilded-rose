@@ -29,6 +29,11 @@ export class GildedRose {
                 item.quality = 0;
             }
         };
+        const degradeInQualityBy = (item: Item, degradeFactor: number) => {
+            if (item.quality > 0) {
+                changeQualityBy(item, degradeFactor);
+            }
+        };
         const ensureHighQuality = (item: Item) => {
             if (item.quality < 50) {
                 changeQualityBy(item, 1)
@@ -63,16 +68,18 @@ export class GildedRose {
                     ensureHighQualityDependingOnSellIn(item, 0);
                     return this.items;
 
-                default:
-                    if (item.quality > 0) {
-                        changeQualityBy(item, -1)
-                    }
-        
+                case 'Conjured Mana Cake':
+                    degradeInQualityBy(item, -2);
                     getOlder(item);
                     preventNegativeQuality(item);
+                    return this.items;
+
+                default:
+                    degradeInQualityBy(item, -1);
+                    getOlder(item);
+                    preventNegativeQuality(item);
+                    return this.items;
               }
         }
-
-        return this.items;
     }
 }
