@@ -21,55 +21,56 @@ export class GildedRose {
         const changeQualityBy = (item: Item, quantity: number) => {
             item.quality += quantity;
         };
+        const getOlder = (item: Item) => {
+            item.sellIn -= 1;
+        };
+        const preventNegativeQuality = (item: Item) => {
+            if (item.sellIn < 0) {
+                item.quality = 0;
+            }
+        };
+        const ensureHighQuality = (item: Item) => {
+            if (item.quality < 50) {
+                changeQualityBy(item, 1)
+            }
+        };
+        const ensureHighQualityDependingOnSellIn = (item: Item, sellInBorder: number) => {
+            if (item.sellIn < sellInBorder) {
+                ensureHighQuality(item);
+            }
+        };
 
         for (let i = 0; i < this.items.length; i++) {
             const item = this.items[i];
 
-            if (item.name == 'Sulfuras, Hand of Ragnaros') {
-                return this.items;
-            }
-            if (item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-                if (item.quality < 50) {
-                    changeQualityBy(item, 1);
-                        if (item.sellIn < 11) {
-                            if (item.quality < 50) {
-                                changeQualityBy(item, 1)
-                            }
-                        }
-                        if (item.sellIn < 6) {
-                            if (item.quality < 50) {
-                                changeQualityBy(item, 1)
-                            }
-                        }
-                }
-                item.sellIn = item.sellIn - 1;
-                if (item.sellIn < 0) {
-                    item.quality = 0;
-                }
-                return this.items;
-            }
+            switch(item.name) {
+                case 'Sulfuras, Hand of Ragnaros':
+                    return this.items;
 
-            if (item.name == 'Aged Brie') {
-                if (item.quality < 50) {
-                    changeQualityBy(item, 1)
-                }
-                item.sellIn = item.sellIn - 1;
-                if (item.sellIn < 0) {
+                case 'Backstage passes to a TAFKAL80ETC concert':
                     if (item.quality < 50) {
-                        changeQualityBy(item, 1)
+                        changeQualityBy(item, 1);
+                        ensureHighQualityDependingOnSellIn(item, 11);
+                        ensureHighQualityDependingOnSellIn(item, 6);
                     }
-                }
-                return this.items;
-            }
+                    getOlder(item);
+                    preventNegativeQuality(item);
+                    return this.items;
+                
+                case 'Aged Brie':
+                    ensureHighQuality(item);
+                    getOlder(item);
+                    ensureHighQualityDependingOnSellIn(item, 0);
+                    return this.items;
 
-            if (item.quality > 0) {
-                changeQualityBy(item, -1)
-            }
-
-            item.sellIn = item.sellIn - 1;
-            if (item.sellIn < 0) {
-                item.quality = 0
-            }
+                default:
+                    if (item.quality > 0) {
+                        changeQualityBy(item, -1)
+                    }
+        
+                    getOlder(item);
+                    preventNegativeQuality(item);
+              }
         }
 
         return this.items;
