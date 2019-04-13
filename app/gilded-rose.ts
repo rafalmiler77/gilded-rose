@@ -34,20 +34,20 @@ export class GildedRose {
                 changeQualityBy(item, degradeFactor);
             }
         };
-        const ensureHighQuality = (item: Item, callback = () => {})  => {
+        const ensureHighQuality = (item: Item, callback?: Function | undefined)  => {
             if (item.quality < 50) {
                 changeQualityBy(item, 1)
             }
-            callback();
+            if (callback) callback();
         };
         const ensureHighQualityDependingOnSellIn = (item: Item, sellInBorder: number) => {
             if (item.sellIn < sellInBorder) {
                 ensureHighQuality(item);
             }
         };
-        const sellInDates = [11, 6];
-        const handleBackstageQuality = (sellInDates, item: Item) => sellInDates.forEach((sellInDate: number) =>
-            ensureHighQualityDependingOnSellIn(item, sellInDate)
+        const sellInDays = [11, 6];
+        const handleBackstageQuality = (sellInDays: number[], item: Item) => sellInDays.forEach((sellInDay: number) =>
+            ensureHighQualityDependingOnSellIn(item, sellInDay)
         )
 
         for (let i = 0; i < this.items.length; i++) {
@@ -58,7 +58,7 @@ export class GildedRose {
                     return this.items;
 
                 case 'Backstage passes to a TAFKAL80ETC concert':
-                    ensureHighQuality(item, handleBackstageQuality(sellInDates, item));
+                    ensureHighQuality(item, () => handleBackstageQuality(sellInDays, item));
                     getOlder(item);
                     preventNegativeQuality(item);
                     return this.items;
